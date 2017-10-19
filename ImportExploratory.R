@@ -48,3 +48,4 @@ coag <- read_csv("Data/ACITdataset_UCSB_23Feb15.csv") %>%
   mutate(daysToDeath = (edarrivaldatetime %--% datetimeofdeath) / ddays(1)) %>%
   mutate(died = !is.na(datetimeofdeath)) %>%
   select(-injurydatetime, -hr0_datetime, -edarrivaldatetime, -datetimeofdeath)
+
