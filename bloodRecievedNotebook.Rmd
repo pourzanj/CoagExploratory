@@ -1,0 +1,44 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Blood Recieved and ISS
+
+Explore the relationship between blood recieved and ISS, in each injury type.
+
+```{r}
+coag %>%
+  ggplot(aes(x = iss, y = icu_0to6h_blood_units)) +
+  geom_point() +
+  scale_y_log10() +
+  geom_smooth() +
+  facet_wrap(~mechtype)
+```
+
+GSW patients seem to increase and then decrease suggesting a quadratic relationship.
+
+# Exploring GSW
+
+```{r}
+coag %>% filter(mechtype == "GSW") %>%
+  ggplot(aes(x = icu_0to6h_blood_units)) +
+  geom_histogram()
+```
+
+```{r}
+coag %>% filter(mechtype == "GSW") %>%
+  ggplot(aes(x = hr0_sbp, y = icu_0to6h_blood_units)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+coag %>%
+  filter(age >= 50) %>%
+  select(male, age, icu_0to6h_blood_units) %>%
+  group_by(male) %>%
+  summarize(AverageBloodRecieved = mean(icu_0to6h_blood_units, na.rm = TRUE),
+            SdBloodRecieve = sd(icu_0to6h_blood_units, na.rm = TRUE))
+```
+

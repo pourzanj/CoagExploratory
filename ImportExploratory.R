@@ -15,12 +15,13 @@ coag <- read_csv("Data/ACITdataset_UCSB_23Feb15.csv") %>%
          hr0_temp, hr0_hr, hr0_resprate, hr0_sbp,
          
          hr0_ph, hr0_paco2, hr0_pao2, hr0_hco3, hr0_serumco2, hr0_bun, hr0_hgb,
-         hr0_lactate, hr0_basedefexc, hr0_inr,
+         hr0_lactate, hr0_basedefexc, hr0_inr, hr0_plts,
          
          hr0_factorii, hr0_factorv, hr0_factorvii, hr0_factorviii,
-         hr0_factorix, hr0_factorx, hr0_ddimer, hr0_apc, hr0_pc,
-         hr0_atiii, hr0_fibrinogen_rlab
-         ) %>%
+         hr0_factorix, hr0_factorx, hr0_ddimer, hr0_pc,
+         hr0_atiii, hr0_fibrinogen_rlab,
+         
+         sample0h_crt_r, sample0h_crt_k, sample0h_crt_ma, sample0h_crt_ly30) %>%
   
   #clean some of the columns
   mutate(mechtype = as.character(mechtype)) %>%
