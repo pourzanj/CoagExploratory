@@ -3,8 +3,8 @@ library(lubridate)
 library(readr)
 
 #split data in to a general tbl and a tbl containing all factors and other blood tests
-coag <- read_csv("Data/ACITdataset_UCSB_23Feb15.csv") %>%
-  select(acitnum, male, age, bmi,
+coag <- read_csv("~/Coagulopathy/CoagExploratory/Data/ACITdataset_UCSB_23Feb15.csv") %>%
+  select(acitnum, male, age, bmi, race, latino,
          mechtype, blunt, tbi, edarrivalgcs, numribfxs, admitday_intubated,
          iss, aishead1, aisface2, aischest3, aisabdomen4, aisextremity5,
          
