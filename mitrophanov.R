@@ -69,7 +69,7 @@ mitraphanov <- function(t, state, parameters) {
     r49A <- k68*APC*FVa5 - k67*APC_FVa5
     r49B <- k70*APC_FVa5
     r50A <- k68*APC*FVa3 - k67*APC_FVa3
-    r50B <- k69*APC_FVa53
+    r50B <- k69*APC*FVa53
     r51  <- k71*FVa3
     r52  <- k71*FVa53
     r53  <- k68*APC*LCA1 - k67*APC_LCA1
@@ -101,17 +101,17 @@ mitraphanov <- function(t, state, parameters) {
     dTF <- -r1 - r2
     dFVII <- -r1 - r4 - r5
     dTF_FVII <- r1
-    dTF_FVIIa <- r2 - r6 - r7 - r8A + r8B - r22 - r27
+    dTF_FVIIa <- r2 - r6A - r7 - r8A + r8B - r22 - r27
     dFVIIa <- -r2 + r3 + r4 + r5
     dFX <- -r6A - r12A + r14- r28
-    dFXa <- -r7 + r12 - r17 - r20 - r23 + r28 - r55 - r56 + r61 + r62 - r66 + r69 + r70
+    dFXa <- -r7 + r12B - r17 - r20 - r23 + r28 - r55 - r56 + r61 + r62 - r66 + r69 + r70
     dFIIa <- r9 + r19 - r26 - r30A + r30B - r31A + r31B - r33A + r33B - r34 - r43 + r59 + r60 + r68
     dTF_FVIIa_FX <- r6A - r6B
     dTF_FVIIa_FXa <- r6B + r7 - r21
     dFIX <- -r8A
     dFIXa <- r8B - r11 + r14 + r15 - r25
-    dTF_FVIIa_FIX <- r8
-    dFII <- -r9 - r18 - r57 -r58 + r62 - r67 + r70 - r71
+    dTF_FVIIa_FIX <- r8A - r8B
+    dFII <- -r9 - r18A - r57A - r58A + r62 - r67A + r70 - r71
     dFVIII <- -r10
     dFVIIIa <- r10 - r11 - r13
     dFIXa_FVIIIa <- r11 - r12A + r12B - r15
@@ -122,19 +122,19 @@ mitraphanov <- function(t, state, parameters) {
     dFVa <- r16 - r17 + r29 - r46 - r71
     dFXa_FVa <- r17 - r18A + r18B
     dFXa_FVa_FII <- r18A - r18B
-    dmIIa <- r18B - r19 - r24 + r57 + r58 - r59 - r60 - r63 - r68
+    dmIIa <- r18B - r19 - r24 + r57B + r58B - r59 - r60 - r63 - r68
     dTFPI <- -r20 - r21
     dFXa_TFPI <- r20 - r22
     dTF_FVIIa_FXa_TFPI <- r21 + r22
     dAT <- -r23 - r24 - r25 -r26 - r27 - r35 - r36 - r37 - r45 - r65
     dFg <- -r30A
     dFg_FIIa <- r30A - r30B
-    dFnI <- r30 - r31 -2*r32
+    dFnI <- r30B - r31A -2*r32
     dFnI_FIIa <- r31A - r31B - r36
-    dFnII <- r31 + -r34 - r41
+    dFnII <- r31B + -r34 - r41
     dFnII_FIIa <- r34 - r37
     dFnI2 <- r32 - r33A
-    dFnI2_FIIa <- r33 - r35
+    dFnI2_FIIa <- r33A - r33B - r35
     dFnII2 <- r33B - r42
     dPn <- -r38 + r40
     dAP <- -r38
@@ -144,15 +144,15 @@ mitraphanov <- function(t, state, parameters) {
     dFDP <- r41 + 2*r42
     dTm <- -r43 + r45 - r63 + r65
     dTm_FIIa <- r43 - r44A + r44B - r45 - r54
-    dPC <- -r44 - r64
+    dPC <- -r44A - r64A
     dTm_FIIa_PC <- r44A - r44B
-    dAPC <- r44 - r46 + r47 + r48 - r49A + r49B - r50A + r50B - r53 - r54 + r64
+    dAPC <- r44B - r46 + r47 + r48 - r49A + r49B - r50A + r50B - r53 - r54 + r64B
     dAPC_FVa <- r46 - r47 - r48
-    dFVa5 <- r47 - r49 - r55
-    dFVa3 <- r48 - r50 - r51 - r56
+    dFVa5 <- r47 - r49A - r55
+    dFVa3 <- r48 - r50A - r51 - r56
     dAPC_FVa5 <- r49A - r49B
     dAPC_FVa3 <- r50A - r50B
-    dFVa53 <- r49 + r50 - r52 - r66
+    dFVa53 <- r49B + r50B - r52 - r66
     dLCA1 <- r51 + r52 - r53 + r61 + r62 + r69 + r70
     dFXa_FVa5 <- r55 - r57A + r57B - r72
     dFXa_FVa3 <- r56 - r58A + r58B - r61
@@ -163,25 +163,91 @@ mitraphanov <- function(t, state, parameters) {
     dFXa_FVa53 <- r66 - r67A + r67B - r69 + r72
     dFXa_FVa53_FII <- r67A - r67B - r70
     
+    dAPC_LCA1 <- r53
+    dTm_FIIa_APC <- r54
+    dFII_FVa <- r71 
+    
     list(c(dTF, dFVII, dTF_FVII, dTF_FVIIa, dFVIIa, dFX, dFXa, dFIIa, dTF_FVIIa_FX,
            dTF_FVIIa_FXa, dFIX, dFIXa, dTF_FVIIa_FIX, dFII, dFVIII, dFVIIIa, dFIXa_FVIIIa,
            dFIXa_FVIIIa_FX, dFVIIIa1L, dFVIIIa2, dFV, dFVa, dFXa_FVa, dFXa_FVa_FII,
            dmIIa, dTFPI, dFXa_TFPI, dTF_FVIIa_FXa_TFPI, dAT, dFg, dFg_FIIa, dFnI,
            dFnI_FIIa, dFnII, dFnII_FIIa, dFnI2, dFnI2_FIIa, dFnII2, dPn, dAP, dtPA,
-           dPAI, dPg, dFDP, dTM, dTm_FIIa, dPC, dTm_FIIa_PC, dAPC, dAPC_FVa,
+           dPAI, dPg, dFDP, dTm, dTm_FIIa, dPC, dTm_FIIa_PC, dAPC, dAPC_FVa,
            dFVa5, dFVa3, dAPC_FVa5, dAPC_FVa3, dFVa53, dLCA1, dFXa_FVa5, dFXa_FVa3,
-           dFXa_FVa5_FII, dFXa_FVa3_FII, dTm_mIIa, dTm_mIIa_PC, dFXa_FVa53, dFXa_FVa53_FII))
+           dFXa_FVa5_FII, dFXa_FVa3_FII, dTm_mIIa, dTm_mIIa_PC, dFXa_FVa53, dFXa_FVa53_FII,
+           dAPC_LCA1, dTm_FIIa_APC, dFII_FVa))
   })
 }
 
 
 
-parameters <- c(k41 = 1, k46, k45, k47, k46, k48, k49,
-                k52, k53, k54, k55, k56,
-                k61, k62, k63, k64, k65, k66)
-state      <- c(X = 1, Y = 1, Z = 1)
-times      <- seq(0, 100, by = 0.01)
+parameters <- c(k1 = 3.1e-3, k2 = 3.2e6,
+                k3 = 3.1e-3, k4 = 2.3e7,
+                k5 = 4.4e5,
+                k6 = 1.3e7,
+                k7 = 2.3e4,
+                k8 = 1.05, k9 = 2.5e7, k10 = 6,
+                k11 = 19, k12 = 2.2e7,
+                k13 = 2.4, k14 = 1e7, k15 = 1.8,
+                k16 = 7.5e3,
+                k17 = 2e7,
+                k18 = 5e-3, k19 = 1e7,
+                k20 = 1e-3, k21 = 1e8, k22 = 8.2,
+                k23 = 2.2e4, k24 = 6e-3,
+                k25 = 1e-3,
+                k26 = 2e7,
+                k27 = 0.2, k28 = 4e8,
+                k29 = 103, k30 = 1e8, k31 = 63.5,
+                k32 = 2.3e8,
+                k33 = 3.6e-4, k34 = 9e5,
+                k35 = 1.1e-4, k36 = 3.2e8,
+                k37 = 5e7,
+                k38 = 4.2e3,
+                k39 = 7.1e3,
+                k40 = 4.9e2,
+                k41 = 1.6e4,
+                k42 = 2.3e2,
+                k43 = 5.7e3,
+                k44 = 3e6,
+                k45 = 7.2e2, k46 = 1e8, k47 = 84,
+                k48 = 7.5e2, k49 = 7.4,
+                k50 = 0.064, k51 = 1e6,
+                k52 = 7.5e2, k53 = 49,
+                k54 = 1e3,
+                k55 = 1.6e4,
+                k56 = 1e4,
+                k57 = 3e6,
+                k58 = 4e7,
+                k61 = 4.628e-1, k62 = 8.038e7,
+                k63 = 2.026e2, k64 = 3.377e7, k65 = 2.545e-1,
+                k66 = 1.495e4,
+                k67 = 2.012, k68 = 3.426e7,
+                k69 = 4.4e-1,
+                k70 = 1.381e-1,
+                k71 = 1.25e-2,
+                k72 = 2.947e-1,
+                k73 = 2.369e1,
+                k74 = 5.994,
+                k75 = 1.317e8,
+                k76 = 1.042e8,
+                k77 = 2.93e-3,
+                k78 = 210, k79 = 3.33e7,
+                k80 = 1.707e6,
+                k59 = 0.09, k60 = 0.47, K1 = 7.7e-8, K2 = 4.1e-7, K3 = 3e-7, K4 = 2.1e-6)
 
-out <- ode(y = state, times = times, func = Lorenz, parms = parameters)
+state      <- c(TF = 15e-12, FVII = 1e-8, TF_FVII = 0, TF_FVIIa = 0, FVIIa = 1e-10, FX = 1.6e-7, FXa = 0, FIIa = 0, TF_FVIIa_FX = 0,
+                TF_FVIIa_FXa = 0, FIX = 9e-8, FIXa = 0, TF_FVIIa_FIX = 0, FII = 1.4e-6, FVIII = 7e-10, FVIIIa = 0, FIXa_FVIIIa = 0, 
+                FIXa_FVIIIa_FX = 0, FVIIIa1L = 0, FVIIIa2 = 0, FV = 2e-8, FVa = 0, FXa_FVa = 0, FXa_FVa_FII = 0,
+                mIIa = 0, TFPI = 2.5e-9, FXa_TFPI = 0, TF_FVIIa_FXa_TFPI = 0, AT = 3.4e-6, Fg = 9e-6, Fg_FIIa = 0, FnI = 0,
+                FnI_FIIa = 0, FnII = 0, FnII_FIIa = 0, FnI2 = 0, FnI2_FIIa = 0, FnII2 = 0, Pn = 0, AP = 1e-6, tPA = 7e-11,
+                PAI = 4e-10, Pg = 2e-6, FDP = 0, Tm = 1e-9, Tm_FIIa = 0, PC = 7e-8, Tm_FIIa_PC = 0, APC = 0, APC_FVa = 0,
+                FVa5 = 0, FVa3 = 0, APC_FVa5 = 0, APC_FVa3 = 0, FVa53 = 0, LCA1 = 0, FXa_FVa5 = 0, FXa_FVa3 = 0,
+                FXa_FVa5_FII = 0, FXa_FVa3_FII = 0, Tm_mIIa = 0, Tm_mIIa_PC = 0, FXa_FVa53 = 0, FXa_FVa53_FII = 0,
+                APC_LCA1 = 0, Tm_FIIa_APC = 0, FII_FVa = 0)
+
+times      <- seq(0, 200, by = 0.01)
+
+out <- ode(y = state, times = times, func = mitraphanov, parms = parameters) %>% as.data.frame %>% as_tibble
 
 #########
+out %>% select(time, TF, FVIIa, FVII, TF_FVIIa) %>% gather(state,value,-time) %>% ggplot(aes(time, value)) + geom_line() + facet_grid(state ~ ., scales = "free")
