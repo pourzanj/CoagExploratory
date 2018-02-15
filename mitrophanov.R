@@ -1,6 +1,6 @@
 library(deSolve)
 library(tidyverse)
-
+library(rstan)
 
 mitraphanov <- function(t, state, parameters) {
   with(as.list(c(state, parameters)), {
@@ -112,6 +112,7 @@ mitraphanov <- function(t, state, parameters) {
     dFIXa <- r8B - r11 + r14 + r15 - r25
     dTF_FVIIa_FIX <- r8A - r8B
     dFII <- -r9 - r18A - r57A - r58A + r62 - r67A + r70 - r71
+    #if((t %% 60) == 0) print(paste("t:", t,"r0:", r9, "r18A:", r18A, "r57A:", r57A, "r58A:", r58A, "r67A:", r67A, "r71:", r71))
     dFVIII <- -r10
     dFVIIIa <- r10 - r11 - r13
     dFIXa_FVIIIa <- r11 - r12A + r12B - r15
@@ -216,8 +217,8 @@ parameters <- c(k1 = 3.1e-3, k2 = 3.2e6,
                 k54 = 1e3,
                 k55 = 1.6e4,
                 k56 = 1e4,
-                k57 = 3e6,
-                k58 = 4e7,
+                k57 = 4e5,#3e6 before Tie
+                k58 = 4.5e5,#4e7 (original value instead of ties value)
                 k61 = 4.628e-1, k62 = 8.038e7,
                 k63 = 2.026e2, k64 = 3.377e7, k65 = 2.545e-1,
                 k66 = 1.495e4,
@@ -245,9 +246,25 @@ state      <- c(TF = 15e-12, FVII = 1e-8, TF_FVII = 0, TF_FVIIa = 0, FVIIa = 1e-
                 FXa_FVa5_FII = 0, FXa_FVa3_FII = 0, Tm_mIIa = 0, Tm_mIIa_PC = 0, FXa_FVa53 = 0, FXa_FVa53_FII = 0,
                 APC_LCA1 = 0, Tm_FIIa_APC = 0, FII_FVa = 0)
 
-times      <- seq(0, 200, by = 0.01)
+times      <- seq(0, 1800, by = 1)
 
-out <- ode(y = state, times = times, func = mitraphanov, parms = parameters) %>% as.data.frame %>% as_tibble
+out <- ode(y = state, times = times, func = mitraphanov, parms = parameters, atol = 1e-6, rtol = 1e-18) %>% as.data.frame %>% as_tibble
 
 #########
-out %>% select(time, TF, FVIIa, FVII, TF_FVIIa) %>% gather(state,value,-time) %>% ggplot(aes(time, value)) + geom_line() + facet_grid(state ~ ., scales = "free")
+out %>% select(time,FVIIa, AT, PC, APC, FII, FIIa, mIIa, Fg, FnII2, FDP, tPA, PAI) %>%
+  mutate(FIIaSUM = FIIa + mIIa) %>%
+  select(-FIIa, -mIIa) %>%
+  gather(state,value,-time) %>%
+  ggplot(aes(time, value)) + geom_line() + facet_grid(state ~ ., scales = "free")
+
+mit <- out %>%
+  select(time,AT, FII, FIIa, mIIa, Fg, FnI, FnI2, FnII, FnII2, tPA, PAI) %>%
+  mutate(FIIa = FIIa + mIIa,
+         Fn = (FnI + 2*FnII + FnII + 2*FnII2)*1e7) %>%
+  mutate(FII = 100/1.4e-6*FII,
+         AT = 100/3.4e-6*AT) %>%
+  select(time,FII, FIIa, AT, Fg, Fn, tPA, PAI)
+  
+mit2 <- mit %>% gather(state, value, -time)
+
+mit2 %>% ggplot(aes(time, value)) + geom_line() + facet_grid(state ~ ., scales = "free")
